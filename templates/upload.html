@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Upload Image</title>
+  <link href="static/css/layout.css" rel="stylesheet" type="text/css" media="all">
+  <style>
+    .image-container {
+      text-align: center;
+      margin-top: 5px;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    .button {
+      background-color: #4caf50;
+      /* Green */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+
+    .button[disabled] {
+      cursor: not-allowed;
+      /* Change cursor to indicate the button is disabled */
+      opacity: 0.5;
+      /* Fade the button to show it's disabled */
+    }
+
+    .model-selection {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 15px;
+      background-color: #f8f8f8;
+    }
+
+    .model-selection label {
+      margin-right: 20px;
+      font-size: 16px;
+    }
+
+    .model-selection input[type="radio"] {
+      margin-right: 5px;
+      cursor: pointer;
+    }
+
+    .model-selection label:not(:first-of-type) {
+      margin-top: 10px;
+      display: inline-block;
+    }
+
+    /* .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip .tooltip-text {
+      visibility: hidden;
+      width: 160px;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -80px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .tooltip .tooltip-text {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #555 transparent transparent transparent;
+    }
+
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    } */
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip .tooltip-text {
+      width: 160px;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -80px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .tooltip .tooltip-text::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #555 transparent transparent transparent;
+    }
+
+    .tooltip.show .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+
+
+    .image {
+      text-align: center;
+      /* Center the content inside each image div */
+      margin: 0 20px;
+    }
+
+    .image-pair {
+      display: flex;
+      align-items: center;
+      /* Align items vertically */
+      justify-content: center;
+      /* Center the items horizontally */
+      flex-wrap: nowrap;
+      /* Prevent wrapping into multiple lines */
+    }
+  </style>
+</head>
+
+<body id="top">
+  <!--Header Start-->
+  <div class="wrapper row1">
+    <header id="header" class="clear">
+      <nav id="mainav">
+        <ul class="clear">
+          <li class="fl_left"><a href="/">Home</a></li>
+        </ul>
+      </nav>
+    </header>
+  </div>
+  <!--Header End-->
+  <!--Body Start-->
+  <div class="wrapper row3 image">
+    <!-- <h3>Error Message: {{ err_msg }}</h3> -->
+    <h1 class="image"><b>Upload MRI Image (.nii format only)</b></h1><br>
+
+    <form action="/uploadImage" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+      <input type="file" class="button" name="file" id="fileInput" accept=".nii"
+        onchange="enableUploadButton()" /><br /><br><br>
+
+      <label><b>Preprocessing will enhance the image quality for better analysis. Please preprocess
+        the MRI image if not done previously</b></label>
+      <div class="image-pair">
+        <input type="checkbox" id="preprocessCheckbox" name="preprocessCheckbox" />
+        <label>Do you want to preprocess the MRI image</label>
+        <!-- <span class="tooltip" onmouseover="toggleTooltip()" onmouseout="toggleTooltip()">ℹ️
+          <span class="tooltiptext"></span></span> -->
+      </div>
+      <br><br>
+      <div class="model-selection image-pair">
+        <label>Select the model:</label><br />
+        <input type="radio" id="unet" name="model" value="UNET" checked />
+        <label for="gan1">UNET</label><br />
+        <input type="radio" id="unetwithresnet" name="model" value="UNETWITHRESNET" />
+        <label for="gan2">UNET with RESNET</label><br />
+      </div>
+      <br><br>
+      <input type="submit" class="button" value="Upload" id="uploadButton" disabled />
+    </form>
+
+  </div>
+  <!--Main Body End-->
+  <!--Footer Start-->
+  <div class="wrapper row4">
+    <footer id="footer" class="clear">
+      <div class="one_third first">
+        <h6 class="title">College Details</h6>
+        <address class="btmspace-15">
+          SRH Hochschulen GmbH<br>
+          Campus Heidelberg<br>
+          Ludwig-Guttmann-Straße 6<br>
+          69123, Heidelberg
+        </address>
+        <ul class="nospace">
+          <li class="btmspace-10"><span class="fa fa-phone"></span> +49 6221 6799-000</li>
+          <li><span class="fa fa-envelope-o"></span> <a href="mailto:info.hshd@srh.de">info.hshd@srh.de</a></li>
+          <p><a href="https://www.srh-hochschule-heidelberg.de/en/">Website &raquo;</a></p>
+        </ul>
+      </div>
+      <div class="one_third">
+        <h6 class="title">Project Mentor</h6>
+        <ul class="nospace linklist">
+          <li>Prof. Dr.-Ing. Swati Chandna</li>
+          <li><span class="fa fa-envelope-o"></span> <a href="mailto:swati.chandna@srh.de">swati.chandna@srh.de</a></li>
+        </ul>
+      </div>
+      <div class="one_third">
+        <h6 class="title">Contributors Details</h6>
+        <ul class="nospace linklist">
+          <li>Nimish Bhatt</li>
+          <li><span class="fa fa-envelope-o"></span> <a
+              href="mailto:nimish.bhatt@stud.hochschule-heidelberg.de">nimish.bhatt@stud.hochschule-heidelberg.de</a>
+          </li>
+          <br />
+          <li>Nipun Aggarwal</li>
+          <li><span class="fa fa-envelope-o"></span> <a
+              href="mailto:nipun.aggarwal@stud.hochschule-heidelberg.de">nipun.aggarwal@stud.hochschule-heidelberg.de</a>
+          </li>
+        </ul>
+      </div>
+    </footer>
+  </div>
+  <!--Footer End-->
+</body>
+
+</html>
+
+<script>
+  document.getElementById("fileInput").addEventListener("change", function () {
+    var file = this.files[0]; // Get the file from the file input
+    var button = document.getElementById("uploadButton");
+
+    // Check if there is a file and enable the upload button if there is
+    if (file) {
+      button.disabled = false;
+    } else {
+      button.disabled = true;
+    }
+  });
+  function validateForm() {
+    var fileInput = document.getElementById('fileInput');
+    var fileName = fileInput.value;
+    if (fileName.split('.').pop().toLowerCase() !== 'nii') {
+      alert('Please select a .nii file');
+      return false;
+    }
+    return true;
+  }
+
+  function enableUploadButton() {
+    var fileInput = document.getElementById('fileInput');
+    var uploadButton = document.getElementById('uploadButton');
+    if (fileInput.value !== '') {
+      uploadButton.disabled = false;
+    } else {
+      uploadButton.disabled = true;
+    }
+  }
+
+  function toggleTooltip() {
+    var tooltip = document.querySelector('.tooltip');
+    tooltip.classList.toggle('show');
+  }
+
+
+</script>

@@ -1,0 +1,10 @@
+pip==24.0
+Flask==3.0.2
+Werkzeug==3.0.1
+numpy==1.26.4
+tensorflow==2.16.1
+matplotlib==3.8.3
+scikit-image==0.22.0
+opencv-python==4.8.1.78
+nibabel==5.2.1
+nilearn==0.10.3

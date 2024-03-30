@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Image Display</title>
+  <link href="static/css/layout.css" rel="stylesheet" type="text/css" media="all">
+  <style>
+    .image-container {
+      text-align: center;
+      margin-top: 5px;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    .button {
+      background-color: #4caf50;
+      /* Green */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+
+    img {
+      max-width: 200px;
+      max-height: 200px;
+      border: 2px solid black;
+    }
+
+    .image-pair {
+      display: flex;
+      align-items: center;
+      /* Align items vertically */
+      justify-content: center;
+      /* Center the items horizontally */
+      flex-wrap: nowrap;
+      /* Prevent wrapping into multiple lines */
+    }
+
+    .image {
+      text-align: center;
+      /* Center the content inside each image div */
+      margin: 0 20px;
+    }
+  </style>
+</head>
+
+<body id="top">
+  <!--Header Start-->
+  <div class="wrapper row1">
+    <header id="header" class="clear">
+      <nav id="mainav">
+        <ul class="clear">
+          <li class="fl_left"><a href="/">Home</a></li>
+        </ul>
+      </nav>
+    </header>
+  </div>
+  <!--Header End-->
+  <!--Body Start-->
+  <div class="wrapper row3 image-container image">
+    <h1 class="image"><b>Segmentation Results</b></h1><br/><br/>
+
+    <div class="image-pair">
+      <div class="image">
+        <h3>Slice 31</h3>
+        <img src="{{ url_for('static', filename=slice_31_image_url) }}" alt="Slice 31 Image"
+          onclick="showImage('{{ slice_31_image_url }}')" />
+      </div>
+      <div class="image">
+        <h3>Slice 62</h3>
+        <img src="{{ url_for('static', filename=slice_62_image_url) }}" alt="Slice 62 Image"
+          onclick="showImage('{{ slice_62_image_url }}')" />
+      </div>
+    </div>
+
+    <div class="image-pair">
+      <div class="image">
+        <h3>Slice 93</h3>
+        <img src="{{ url_for('static', filename=slice_93_image_url) }}" alt="Slice 93 Image"
+          onclick="showImage('{{ slice_93_image_url }}')" />
+      </div>
+      <div class="image">
+        <h3>Slice 124</h3>
+        <img src="{{ url_for('static', filename=slice_124_image_url) }}" alt="Slice 124 Image"
+          onclick="showImage('{{ slice_124_image_url }}')" />
+      </div>
+    </div>
+    <br/><br/>
+    <p class="image"><a href="/upload" class="button image">Upload another image</a></p>
+  </div>
+  <!--Main Body End-->
+  <!--Footer Start-->
+  <div class="wrapper row4">
+    <footer id="footer" class="clear">
+      <div class="one_third first">
+        <h6 class="title">College Details</h6>
+        <address class="btmspace-15">
+          SRH Hochschulen GmbH<br>
+          Campus Heidelberg<br>
+          Ludwig-Guttmann-Straße 6<br>
+          69123, Heidelberg
+        </address>
+        <ul class="nospace">
+          <li class="btmspace-10"><span class="fa fa-phone"></span> +49 6221 6799-000</li>
+          <li><span class="fa fa-envelope-o"></span> <a href="mailto:info.hshd@srh.de">info.hshd@srh.de</a></li>
+          <p><a href="https://www.srh-hochschule-heidelberg.de/en/">Website &raquo;</a></p>
+        </ul>
+      </div>
+      <div class="one_third">
+        <h6 class="title">Project Mentor</h6>
+        <ul class="nospace linklist">
+          <li>Prof. Dr.-Ing. Swati Chandna</li>
+          <li><span class="fa fa-envelope-o"></span> <a href="mailto:swati.chandna@srh.de">swati.chandna@srh.de</a></li>
+        </ul>
+      </div>
+      <div class="one_third">
+        <h6 class="title">Contributors Details</h6>
+        <ul class="nospace linklist">
+          <li>Nimish Bhatt</li>
+          <li><span class="fa fa-envelope-o"></span> <a
+              href="mailto:nimish.bhatt@stud.hochschule-heidelberg.de">nimish.bhatt@stud.hochschule-heidelberg.de</a>
+          </li>
+          <br />
+          <li>Nipun Aggarwal</li>
+          <li><span class="fa fa-envelope-o"></span> <a
+              href="mailto:nipun.aggarwal@stud.hochschule-heidelberg.de">nipun.aggarwal@stud.hochschule-heidelberg.de</a>
+          </li>
+        </ul>
+      </div>
+    </footer>
+  </div>
+  <!--Footer End-->
+</body>
+
+</html>
+<script>
+  function showImage(imageUrl) {
+    // Create a dialog box
+    var dialog = document.createElement('dialog');
+
+    // Create an image element to display the full-size image
+    var image = document.createElement('img');
+    full_imageUrl = '/static/' + imageUrl
+    console.log("Image Path", full_imageUrl)
+
+    image.src = full_imageUrl;
+
+    // Calculate the maximum width and height based on dialog size
+    var dialogWidth = window.innerWidth * 0.8; // 80% of window width
+    var dialogHeight = window.innerHeight * 0.8; // 80% of window height
+    var padding = 5; // Padding for image
+
+    // Calculate the maximum width and height to fit inside the dialog
+    var maxWidth = dialogWidth - padding;
+    var maxHeight = dialogHeight - padding;
+
+    // Set the maxWidth and maxHeight of the image
+    image.style.maxWidth = maxWidth + 'px';
+    image.style.maxHeight = maxHeight + 'px';
+    
+    image.style.border = 'None';
+
+    // Add the image to the dialog
+    dialog.appendChild(image);
+
+    // Add a close button to the dialog
+    var closeButton = document.createElement('button');
+    closeButton.textContent = 'Close';
+    closeButton.onclick = function () {
+      dialog.close();
+      dialog.remove();
+    };
+    dialog.appendChild(closeButton);
+
+    // Append the dialog to the document body
+    document.body.appendChild(dialog);
+
+    // Show the dialog
+    dialog.showModal();
+  }
+</script>
